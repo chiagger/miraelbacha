@@ -1,8 +1,13 @@
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
 import { portfolio, PortfolioItem } from "@/data/portfolio";
+import { useState } from "react";
+import { Button, Dialog } from "@mui/material";
 
 export default function Home() {
+  const [openItem, setOpenItem] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState<number>(0);
   return (
     <div
       className={styles.page}
@@ -42,6 +47,9 @@ export default function Home() {
               key={index}
               style={{
                 cursor: "pointer",
+              }}
+              onClick={() => {
+                setOpenItem(index);
               }}
             >
               <Image
@@ -107,6 +115,96 @@ export default function Home() {
           this field is unwavering.
         </p>
       </div>
+      <Dialog open={openItem !== null} onClose={() => setOpenItem(null)}>
+        <div style={{}}>
+          {openItem !== null && (
+            <>
+              <div>
+                <Image
+                  src={portfolio[openItem].images[selectedImage]}
+                  alt=""
+                  width={600}
+                  height={350}
+                  style={{
+                    borderRadius: 4,
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    boxShadow: "8px 6px 15px -8px rgba(65,65,65,0.87",
+                  }}
+                ></Image>
+                <Button
+                  style={{
+                    alignItems: "center",
+                    position: "absolute",
+                    top: 180,
+                    left: 0,
+                    color: "#fff",
+                    fontSize: 20,
+                    opacity: 0.7,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setSelectedImage(
+                      (selectedImage - 1 + portfolio[openItem].images.length) %
+                        portfolio[openItem].images.length
+                    );
+                  }}
+                >
+                  {"<"}
+                </Button>
+                <Button
+                  style={{
+                    alignItems: "center",
+                    position: "absolute",
+                    top: 180,
+                    right: 0,
+                    color: "#fff",
+                    fontSize: 20,
+                    opacity: 0.7,
+
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setSelectedImage(
+                      (selectedImage + 1) % portfolio[openItem].images.length
+                    );
+                  }}
+                >
+                  {">"}
+                </Button>
+              </div>
+              <div style={{ padding: 20, paddingLeft: 30, paddingRight: 30 }}>
+                <div
+                  style={{ fontSize: 20, fontWeight: 500, textAlign: "center" }}
+                >
+                  {portfolio[openItem].title}
+                </div>
+                <div
+                  style={{
+                    fontSize: 14,
+                    fontStyle: "italic",
+                    textAlign: "center",
+                  }}
+                >
+                  directed by {portfolio[openItem].directedBy}
+                </div>
+                <div
+                  style={{
+                    fontSize: 16,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+                    paddingBottom: 10,
+                    textAlign: "center",
+                    marginTop: 15,
+                  }}
+                >
+                  {portfolio[openItem].description}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </Dialog>
     </div>
   );
 }
