@@ -43,6 +43,10 @@ export default function Contacts() {
             flexDirection: "column",
             gap: 5,
             alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href = "https://www.mandy.com/uk/c/mira-el-bacha";
           }}
         >
           <Image src="/img/mandy.svg" alt="" width={40} height={40}></Image>{" "}
@@ -54,6 +58,11 @@ export default function Contacts() {
             flexDirection: "column",
             gap: 5,
             alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href =
+              "https://www.instagram.com/mira.elbacha/?utm_source=ig_web_button_share_sheet&igshid=OGQ5ZDc2ODk2ZA==";
           }}
         >
           <Image src="/img/ig.png" alt="" width={40} height={40}></Image>{" "}
@@ -65,6 +74,11 @@ export default function Contacts() {
             flexDirection: "column",
             gap: 5,
             alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href =
+              "https://www.linkedin.com/in/mira-el-bacha-00a5ab2a9";
           }}
         >
           <Image src="/img/in.png" alt="" width={40} height={40}></Image>{" "}
