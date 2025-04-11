@@ -1,10 +1,6 @@
 import styles from "../page.module.css";
 import Image from "next/image";
 
-import mandyIcon from "/img/mandy.svg";
-import instagramIcon from "/img/instagram.png";
-import linkedinIcon from "/img/linkedin.png";
-
 export default function Contacts() {
   return (
     <div className={styles.page} style={{ color: "#000" }}>
