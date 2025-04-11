@@ -33,6 +33,7 @@ export default function RootLayout({
             alignItems: "center",
             paddingRight: "3vw",
             paddingLeft: "3vw",
+            height: "18vh",
           }}
         >
           <div
@@ -105,7 +106,7 @@ export default function RootLayout({
         </div>
         <div
           className={`${geistSans.variable} ${geistMono.variable}`}
-          style={{ backgroundColor: "#fff" }}
+          style={{ backgroundColor: "#fff", height: "82vh" }}
         >
           {children}
         </div>
