@@ -4,21 +4,31 @@ import styles from "./page.module.css";
 import { portfolio, PortfolioItem } from "@/data/portfolio";
 import { useState } from "react";
 import { Button, Dialog } from "@mui/material";
+import { useMobile } from "@/contexts/mobileContext";
 
 export default function Home() {
   const [openItem, setOpenItem] = useState<number | null>(null);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const { isMobile } = useMobile();
   return (
     <div
       className={styles.page}
-      style={{ display: "flex", alignItems: "flex-start", height: "82vh" }}
+      style={{
+        display: "flex",
+        flexDirection: isMobile ? "column-reverse" : "row",
+        alignItems: "flex-start",
+        height: "82vh",
+      }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          maxWidth: "70%",
+          maxWidth: isMobile ? "100%" : "70%",
           alignItems: "center",
+          justifyContent: "center",
+          maxHeight: isMobile ? "50vh" : "82vh",
+          marginTop: isMobile ? 20 : 0,
         }}
       >
         <div
@@ -68,15 +78,17 @@ export default function Home() {
       </div>
       <div
         style={{
-          maxWidth: "30%",
+          maxWidth: isMobile ? "100%" : "30%",
           color: "#000",
-          textAlign: "right",
+          textAlign: isMobile ? "center" : "right",
           fontSize: 14,
-          paddingLeft: 20,
+          paddingLeft: isMobile ? 0 : 20,
           alignSelf: "center",
           display: "flex",
           flexDirection: "column",
           gap: 10,
+          marginTop: isMobile ? 0 : 10,
+          minHeight: "20vh",
           maxHeight: "70vh",
           overflowY: "scroll",
         }}
@@ -123,8 +135,8 @@ export default function Home() {
                 <Image
                   src={portfolio[openItem].images[selectedImage]}
                   alt=""
-                  width={600}
-                  height={350}
+                  width={isMobile ? 367 : 600}
+                  height={isMobile ? 240 : 350}
                   style={{
                     borderRadius: 4,
                     borderBottomLeftRadius: 0,
@@ -136,7 +148,7 @@ export default function Home() {
                   style={{
                     alignItems: "center",
                     position: "absolute",
-                    top: 180,
+                    top: isMobile ? 110 : 180,
                     left: 0,
                     color: "#fff",
                     fontSize: 20,
@@ -156,7 +168,7 @@ export default function Home() {
                   style={{
                     alignItems: "center",
                     position: "absolute",
-                    top: 180,
+                    top: isMobile ? 110 : 180,
                     right: 0,
                     color: "#fff",
                     fontSize: 20,
@@ -191,8 +203,8 @@ export default function Home() {
                 <div
                   style={{
                     fontSize: 16,
-                    paddingLeft: 20,
-                    paddingRight: 20,
+                    paddingLeft: isMobile ? 0 : 20,
+                    paddingRight: isMobile ? 0 : 20,
                     paddingBottom: 10,
                     textAlign: "center",
                     marginTop: 15,

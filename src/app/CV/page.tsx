@@ -1,16 +1,20 @@
+"use client";
 import { cv1stAdExp, cvOtherExperience } from "@/data/cv";
 import styles from "../page.module.css";
+import { useMobile } from "@/contexts/mobileContext";
 
 export default function CV() {
+  const { isMobile } = useMobile();
+
   return (
     <div className={styles.page} style={{ display: "flex", padding: 0 }}>
       <div
         style={{
-          width: "20vw",
+          width: isMobile ? "40vw" : "20vw",
           height: "82vh",
           backgroundColor: "#696969",
           color: "#fff",
-          padding: 30,
+          padding: isMobile ? 20 : 30,
           fontSize: 14,
           display: "flex",
           flexDirection: "column",
@@ -66,23 +70,32 @@ export default function CV() {
         style={{
           height: "82vh",
 
-          width: "80vw",
+          width: isMobile ? "60vw" : "80vw",
           color: "#000",
-          padding: 50,
+          padding: isMobile ? 30 : 50,
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           paddingBottom: 30,
         }}
       >
         <div
           style={{
             fontSize: 16,
-            width: "50%",
+            width: isMobile ? "100%" : "50%",
             gap: 20,
             maxHeight: "82vh",
+            minHeight: "30vh",
             overflowY: "scroll",
           }}
         >
-          <div style={{ display: "flex", fontSize: 20, fontWeight: 550 }}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 20,
+              fontWeight: 550,
+              marginBottom: 10,
+            }}
+          >
             1st Assistant Director Experience
           </div>
           <div
@@ -107,9 +120,10 @@ export default function CV() {
         <div
           style={{
             fontSize: 16,
-            width: "50%",
+            width: isMobile ? "100%" : "50%",
             maxHeight: "82vh",
             overflowY: "scroll",
+            marginTop: isMobile ? 40 : 0,
           }}
         >
           <div
