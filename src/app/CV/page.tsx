@@ -1,10 +1,11 @@
 "use client";
-import { cv1stAdExp, cvOtherExperience } from "@/data/cv";
 import styles from "../page.module.css";
 import { useMobile } from "@/contexts/mobileContext";
+import { useSiteContent } from "@/contexts/siteContentContext";
 
 export default function CV() {
   const { isMobile } = useMobile();
+  const { assistantExperience, otherExperience, education, skills } = useSiteContent();
 
   return (
     <div className={styles.page} style={{ display: "flex", padding: 0 }}>
@@ -26,25 +27,13 @@ export default function CV() {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div style={{ fontSize: 20, fontWeight: 550 }}>Education</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            <div style={{ fontWeight: 550 }}>
-              UAL; University of the Arts London
+          {education.map((item) => (
+            <div key={item.id} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+              <div style={{ fontWeight: 550 }}>{item.title}</div>
+              <div style={{ fontStyle: "italic" }}>{item.year}</div>
+              <div>{item.description}</div>
             </div>
-            <div style={{ fontStyle: "italic" }}>
-              BA Film Practice | 2020 - 2023
-            </div>
-            <div>
-              Roles: Directing, Casting directing, 1AD, Cinematography and
-              Screenwriting.
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            <div style={{ fontWeight: 550 }}>
-              Liceo Artistico Arcangeli, Bologna
-            </div>
-            <div style={{ fontStyle: "italic" }}>2015 - 2020</div>
-            <div>Specialized in audiovisual and multimedia.</div>
-          </div>
+          ))}
         </div>
 
         <div
@@ -57,13 +46,7 @@ export default function CV() {
         >
           <div style={{ fontSize: 20, fontWeight: 550 }}>Relevant Skills</div>
 
-          <div>
-            -Languages: English (C2), Italian (C2) and Levantine Arabic (B2)
-          </div>
-          <div>-Excellent team work and team building skills</div>
-          <div>-Fast learner</div>
-          <div>-Organised</div>
-          <div>-Time management</div>
+          {skills.map((item) => <div key={item.id}>-{item.text}</div>)}
         </div>
       </div>
       <div
@@ -108,8 +91,8 @@ export default function CV() {
               marginTop: 10,
             }}
           >
-            {cv1stAdExp.map((item, index) => (
-              <div key={index} style={{ display: "flex", gap: 5 }}>
+            {assistantExperience.map((item) => (
+              <div key={item.id} style={{ display: "flex", gap: 5 }}>
                 <div>{item.title}</div>
                 <div>|</div>
                 <div style={{ fontStyle: "italic" }}>{item.year}</div>
@@ -144,9 +127,9 @@ export default function CV() {
               marginTop: 10,
             }}
           >
-            {cvOtherExperience.map((item, index) => (
+            {otherExperience.map((item) => (
               <div
-                key={index}
+                key={item.id}
                 style={{ display: "flex", flexDirection: "column", gap: 5 }}
               >
                 <div style={{ fontWeight: 550 }}>{item.role}</div>

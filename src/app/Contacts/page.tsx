@@ -1,34 +1,42 @@
 "use client";
 import styles from "../page.module.css";
 import Image from "next/image";
+import { useSiteContent } from "@/contexts/siteContentContext";
 
 export default function Contacts() {
+  const { contacts } = useSiteContent();
   return (
     <div className={styles.page} style={{ color: "#000" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 5,
-          alignItems: "center",
-          marginTop: "5vh",
-        }}
-      >
-        <div style={{ fontSize: 24, fontWeight: 500 }}>Work Email</div>
-        <div>miraelbacha.eb@gmail.com</div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 5,
-          marginTop: "5vh",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ fontSize: 24, fontWeight: 500 }}>Phone</div>
-        <div>+44 7884 177270</div>
-      </div>
+      {contacts.email && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 5,
+            alignItems: "center",
+            marginTop: "5vh",
+          }}
+        >
+          <div style={{ fontSize: 24, fontWeight: 500 }}>Work Email</div>
+          <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
+        </div>
+      )}
+      {contacts.phone && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 5,
+            marginTop: "5vh",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ fontSize: 24, fontWeight: 500 }}>Phone</div>
+          <a href={`tel:${contacts.phone.replace(/[^+\d]/g, "")}`}>
+            {contacts.phone}
+          </a>
+        </div>
+      )}
       <div
         style={{
           display: "flex",
@@ -38,53 +46,30 @@ export default function Contacts() {
           justifyContent: "center",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            window.location.href = "https://www.mandy.com/uk/c/mira-el-bacha";
-          }}
-        >
-          <Image src="/img/mandy.svg" alt="" width={40} height={40}></Image>{" "}
-          <div>Mandy</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            window.location.href =
-              "https://www.instagram.com/mira.elbacha/?utm_source=ig_web_button_share_sheet&igshid=OGQ5ZDc2ODk2ZA==";
-          }}
-        >
-          <Image src="/img/ig.png" alt="" width={40} height={40}></Image>{" "}
-          <div>Instagram</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            window.location.href =
-              "https://www.linkedin.com/in/mira-el-bacha-00a5ab2a9";
-          }}
-        >
-          <Image src="/img/in.png" alt="" width={40} height={40}></Image>{" "}
-          <div>LinkedIn</div>
-        </div>
+        {(
+          [
+            { key: "mandy", label: "Mandy", icon: "/img/mandy.svg" },
+            { key: "instagram", label: "Instagram", icon: "/img/ig.png" },
+            { key: "linkedin", label: "LinkedIn", icon: "/img/in.png" },
+          ] as const
+        ).map(
+          ({ key, label, icon }) =>
+            contacts[key] && (
+              <a
+                key={key}
+                href={contacts[key]}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 5,
+                  alignItems: "center",
+                }}
+              >
+                <Image src={icon} alt="" width={40} height={40} />
+                <div>{label}</div>
+              </a>
+            ),
+        )}
       </div>
     </div>
   );

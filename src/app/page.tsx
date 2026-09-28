@@ -1,15 +1,18 @@
 "use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { portfolio, PortfolioItem } from "@/data/portfolio";
 import { useState } from "react";
 import { Button, Dialog } from "@mui/material";
 import { useMobile } from "@/contexts/mobileContext";
+import { useSiteContent } from "@/contexts/siteContentContext";
 
 export default function Home() {
-  const [openItem, setOpenItem] = useState<number | null>(null);
+  const [openItem, setOpenItem] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const { isMobile } = useMobile();
+  const { portfolio, biography } = useSiteContent();
+  const activeProject = portfolio.find((item) => item.id === openItem);
+  const activeImageIndex = activeProject ? Math.min(selectedImage, activeProject.images.length - 1) : 0;
   return (
     <div
       className={styles.page}
@@ -52,19 +55,21 @@ export default function Home() {
             paddingBottom: 10,
           }}
         >
-          {portfolio.map((item: PortfolioItem, index: number) => (
+          {portfolio.map((item) => (
             <div
-              key={index}
+              key={item.id}
               style={{
                 cursor: "pointer",
               }}
               onClick={() => {
-                setOpenItem(index);
+                setOpenItem(item.id);
+                setSelectedImage(0);
               }}
             >
               <Image
                 src={item.images[0]}
-                alt=""
+                alt={item.title}
+                unoptimized
                 width={290}
                 height={150}
                 style={{
@@ -93,48 +98,22 @@ export default function Home() {
           overflowY: "scroll",
         }}
       >
-        <p>
-          Welcome! I am a 1st AD based in East London. I have worked as an AD
-          across continents, collaborating with brands in Italy, the UAE,
-          Germany, the Netherlands, and the UK.
-        </p>
-        <p>
-          You can find a full list of my brand collaborations and AD work below:
-          they range from the Roundhouse in London, to the Cineteca di Bologna
-          in Italy, to the Abu Dhabi Media Company in the UAE.
-        </p>
-        <p>
-          <i>I am currently open to new work.</i>
-        </p>
-
-        <p>
-          <b>Organised.</b> I keep everything on track while making sure
-          creativity has the space it needs to thrive. I have managed schedules
-          for teams of over 50 people without a hitch. Every film I have AD-ed
-          has wrapped up on time, and with satisfied creative teams.
-        </p>
-        <p>
-          <b>Inclusive.</b> I have been an LGBT activist since I was fifteen, as
-          an queer Arab myself. I have worked in anti-racist advocacy, and I am
-          trained in disability inclusion. My work is about listening to the
-          needs of everyone on set and making sure every crew member is valued
-          and motivated.
-        </p>
-        <p>
-          <b>Passionate.</b> I love being part of this industry. I have taught
-          film, studied film, and made films since 2014. Films are the most
-          powerful tool for inspiring and connecting people: my commitment to
-          this field is unwavering.
-        </p>
+        {biography.map((paragraph) => (
+          <p key={paragraph.id} style={{ fontStyle: paragraph.italic ? "italic" : undefined }}>
+            {paragraph.lead && <><b>{paragraph.lead}</b>{" "}</>}
+            {paragraph.text}
+          </p>
+        ))}
       </div>
-      <Dialog open={openItem !== null} onClose={() => setOpenItem(null)}>
+      <Dialog open={Boolean(activeProject)} onClose={() => setOpenItem(null)}>
         <div style={{}}>
-          {openItem !== null && (
+          {activeProject && (
             <>
               <div>
                 <Image
-                  src={portfolio[openItem].images[selectedImage]}
-                  alt=""
+                  src={activeProject.images[activeImageIndex]}
+                  alt={activeProject.title}
+                  unoptimized
                   width={isMobile ? 367 : 600}
                   height={isMobile ? 240 : 350}
                   style={{
@@ -157,8 +136,8 @@ export default function Home() {
                   }}
                   onClick={() => {
                     setSelectedImage(
-                      (selectedImage - 1 + portfolio[openItem].images.length) %
-                        portfolio[openItem].images.length
+                      (activeImageIndex - 1 + activeProject.images.length) %
+                        activeProject.images.length
                     );
                   }}
                 >
@@ -178,7 +157,7 @@ export default function Home() {
                   }}
                   onClick={() => {
                     setSelectedImage(
-                      (selectedImage + 1) % portfolio[openItem].images.length
+                      (activeImageIndex + 1) % activeProject.images.length
                     );
                   }}
                 >
@@ -189,7 +168,7 @@ export default function Home() {
                 <div
                   style={{ fontSize: 20, fontWeight: 500, textAlign: "center" }}
                 >
-                  {portfolio[openItem].title}
+                  {activeProject.title}
                 </div>
                 <div
                   style={{
@@ -198,7 +177,7 @@ export default function Home() {
                     textAlign: "center",
                   }}
                 >
-                  directed by {portfolio[openItem].directedBy}
+                  {activeProject.directedBy && `directed by ${activeProject.directedBy}`}
                 </div>
                 <div
                   style={{
@@ -210,7 +189,7 @@ export default function Home() {
                     marginTop: 15,
                   }}
                 >
-                  {portfolio[openItem].description}
+                  {activeProject.description}
                 </div>
               </div>
             </>
