@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import type { ContentSnapshot, SiteContent } from "@content/types";
 import { defaultContent } from "@content/defaults";
-import { parseContent, parseSnapshot } from "@content/validation";
+import { parseContent } from "@content/validation";
+import { readContentResponse } from "@/lib/content-response";
 import { ContentFields, sections, type Section } from "./content-fields";
 
 const initial: ContentSnapshot = {
@@ -46,10 +47,7 @@ export function ContentEditor({
           cache: "no-store",
           signal: controller.signal,
         });
-        const payload = await response.json();
-        if (!response.ok)
-          throw new Error(payload.error || "Impossibile caricare i contenuti.");
-        const result = parseSnapshot(payload);
+        const result = await readContentResponse(response);
         if (!controller.signal.aborted) {
           setSnapshot(result);
           setContent(result.content);
@@ -99,10 +97,7 @@ export function ContentEditor({
           revision: snapshot.revision,
         }),
       });
-      const payload = await response.json();
-      if (!response.ok)
-        throw new Error(payload.error || "Salvataggio non riuscito.");
-      const result = parseSnapshot(payload);
+      const result = await readContentResponse(response);
       setSnapshot(result);
       setContent(result.content);
       setNotice("Modifiche salvate. Sono già disponibili ricaricando il sito.");

@@ -23,7 +23,10 @@
   },
   "overrides": {
     "@typescript-eslint/eslint-plugin": "8.57.1",
-    "@typescript-eslint/parser": "8.57.1"
+    "@typescript-eslint/parser": "8.57.1",
+    "jwks-rsa": {
+      "jose": "5.10.0"
+    }
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
