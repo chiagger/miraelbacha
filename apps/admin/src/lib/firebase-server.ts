@@ -2,6 +2,7 @@ import "server-only";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { getAuthFailure } from "./auth-errors";
 
 export class ApiError extends Error {
   constructor(
@@ -53,8 +54,9 @@ export async function requireAdmin(request: Request) {
   let uid: string;
   try {
     uid = (await auth.verifyIdToken(token, true)).uid;
-  } catch {
-    throw new ApiError(401, "Sessione scaduta. Accedi di nuovo.");
+  } catch (error) {
+    const failure = getAuthFailure(error);
+    throw new ApiError(failure.status, failure.message);
   }
   if (!allowed.includes(uid))
     throw new ApiError(
